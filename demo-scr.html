@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Entry</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        #showDemo { margin-top: 20px; display: none; }
+        #results { margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Lab</h1>
+    <button onclick="enterLab()">Enter Lab</button>
+    <p id="instruction">Wait until the demonstrator tells you to click "Show Demo".</p>
+    <button id="showDemo" onclick="showResults()">Show Demo</button>
+    <div id="results"></div>
+
+    <script>
+        let participants = [];
+
+        function enterLab() {
+            let labName = prompt("Enter your lab name:");
+            let age = prompt("Enter your age:");
+            let gender = prompt("Enter your gender (Male/Female/Other):");
+            if (labName && age && gender) {
+                participants.push({ lab: labName, age: parseInt(age), gender: gender.toLowerCase() });
+                document.getElementById("showDemo").style.display = "block";
+            }
+        }
+
+        function showResults() {
+            let genderCounts = {};
+            let ageRanges = { '0-18': 0, '19-30': 0, '31-50': 0, '51+': 0 };
+            
+            participants.forEach(p => {
+                genderCounts[p.gender] = (genderCounts[p.gender] || 0) + 1;
+                if (p.age <= 18) ageRanges['0-18']++;
+                else if (p.age <= 30) ageRanges['19-30']++;
+                else if (p.age <= 50) ageRanges['31-50']++;
+                else ageRanges['51+']++;
+            });
+            
+            let resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = `<h3>Demographics:</h3>` +
+                `<p><strong>Gender Distribution:</strong> ${JSON.stringify(genderCounts)}</p>` +
+                `<p><strong>Age Distribution:</strong> ${JSON.stringify(ageRanges)}</p>`;
+            resultsDiv.style.display = "block";
+        }
+    </script>
+</body>
+</html>
